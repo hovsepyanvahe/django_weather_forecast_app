@@ -24,6 +24,7 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=supersecretpassword
+      - POSTGRES_INITDB_ARGS="--data-checksums --timezone=UTC"
     volumes:
       - /var/lib/django_app/postgresql:/var/lib/postgresql/data
       - /var/lib/django_app/db_backups:/backups

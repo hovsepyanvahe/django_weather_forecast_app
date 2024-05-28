@@ -16,6 +16,7 @@ if [[ ${APP_NAME} == 'weather_app' ]]
     ./manage.py makemigrations
     ./manage.py migrate  --no-input --traceback
     ./manage.py collectstatic --no-input
+    echo yes | ./manage.py test
     # if [[  ${DEBUG} == '1' || ${DEBUG} == 'true' ]]
     #   then
     ./manage.py runserver 0.0.0.0:8000

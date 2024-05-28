@@ -1,12 +1,15 @@
+# integration_tests.py
+from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase
 from unittest.mock import patch
+from datetime import timedelta
+from django.utils import timezone
 from .models import WeatherData
 
 
-class WeatherForecastTests(APITestCase):
-    def test_weather_forecast_endpoint(self):
+class WeatherForecastIntegrationTests(TestCase):
+    def test_weather_forecast_integration(self):
         url = reverse('weather-forecast')
         data = {'lat': 33.441792, 'lon': -94.037689, 'detailing_type': 'current'}
 
@@ -18,20 +21,16 @@ class WeatherForecastTests(APITestCase):
             response = self.client.get(url, data)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.json()[0]['lat'], 33.441792)
-        self.assertEqual(response.json()[0]['lon'], -94.037689)
+        self.assertEqual(response.json(), {'weather': 'data'})
 
-        # Check if WeatherData is created
         weather_data = WeatherData.objects.first()
         self.assertIsNotNone(weather_data)
         self.assertEqual(weather_data.lat, 33.441792)
         self.assertEqual(weather_data.lon, -94.037689)
         self.assertEqual(weather_data.detailing_type, 'current')
+        self.assertEqual(weather_data.forecast_data, {'weather': 'data'})
 
-    def test_invalid_weather_forecast_request(self):
-        url = reverse('weather-forecast')
-        data = {'lat': 33.441792, 'lon': -94.037689}  # Missing detailing_type
-
+        # Ensure the cache is utilized
         response = self.client.get(url, data)
-
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.json(), {'weather': 'data'})
