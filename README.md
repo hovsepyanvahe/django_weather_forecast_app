@@ -1,6 +1,4 @@
-```markdown
 # Weather App
-
 This is a Django application for fetching weather forecasts using Docker Compose.
 
 ## Prerequisites
@@ -9,6 +7,7 @@ Before you begin, ensure you have Docker and Docker Compose installed on your sy
 
 - [Docker](https://docs.docker.com/get-docker/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
+```
 
 ## Running the Application
 
